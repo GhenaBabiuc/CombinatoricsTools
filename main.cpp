@@ -1,18 +1,29 @@
 #include <iostream>
 #include <vector>
 #include <conio.h>
-#include "CombinatoricsFunctions.h"
+#include "BigInt.hpp"
 
 using namespace std;
 
-void pause() {
-    cout << "Press Enter to continue...";
-    _getch();
-    cout << endl;
-}
+BigInt factorial(const BigInt &n);
+
+BigInt combinations(const BigInt &n, const BigInt &k);
+
+BigInt arrangements(const BigInt &n, const BigInt &k);
+
+BigInt permutations(const BigInt &n);
+
+BigInt combinationsWithRepetitions(const BigInt &n, const BigInt &k);
+
+BigInt arrangementsWithRepetitions(const BigInt &n, const BigInt &k);
+
+BigInt permutationsWithRepetitions(const std::vector<int> &counts);
+
+void pause();
 
 int main() {
     int choice;
+    int n, k;
     do {
         cout << "Menu:\n";
         cout << "1. Factorial\n";
@@ -31,49 +42,56 @@ int main() {
                 int num;
                 cout << "Enter a number: ";
                 cin >> num;
-                cout << "Factorial: " << factorial(num) << endl;
+                BigInt result = factorial(BigInt(num));
+                cout << "Factorial: " << result << endl;
                 pause();
                 break;
             }
             case 2: {
-                int n, k;
                 cout << "Enter n for combinations: ";
                 cin >> n;
                 cout << "Enter k for combinations: ";
                 cin >> k;
-                cout << "Combinations: " << combinations(n, k) << endl;
+                BigInt result = combinations(BigInt(n), BigInt(k));
+                cout << "Combinations: " << result << endl;
                 pause();
                 break;
             }
             case 3: {
-                int n, k;
-                cout << "Enter n and k for arrangements: ";
-                cin >> n >> k;
-                cout << "Arrangements: " << arrangements(n, k) << endl;
+                cout << "Enter n for arrangements: ";
+                cin >> n;
+                cout << "Enter k for arrangements: ";
+                cin >> k;
+                BigInt result = arrangements(BigInt(n), BigInt(k));
+                cout << "Arrangements: " << result << endl;
                 pause();
                 break;
             }
             case 4: {
-                int n;
                 cout << "Enter n for permutations: ";
                 cin >> n;
-                cout << "Permutations: " << permutations(n) << endl;
+                BigInt result = permutations(BigInt(n));
+                cout << "Permutations: " << result << endl;
                 pause();
                 break;
             }
             case 5: {
-                int n, k;
-                cout << "Enter n and k for combinations with repetitions: ";
-                cin >> n >> k;
-                cout << "Combinations with Repetitions: " << combinationsWithRepetitions(n, k) << endl;
+                cout << "Enter n for combinations with repetitions: ";
+                cin >> n;
+                cout << "Enter k for combinations with repetitions: ";
+                cin >> k;
+                BigInt result = combinationsWithRepetitions(BigInt(n), BigInt(k));
+                cout << "Combinations with Repetitions: " << result << endl;
                 pause();
                 break;
             }
             case 6: {
-                int n, k;
-                cout << "Enter n and k for arrangements with repetitions: ";
-                cin >> n >> k;
-                cout << "Arrangements with Repetitions: " << arrangementsWithRepetitions(n, k) << endl;
+                cout << "Enter n for arrangements with repetitions: ";
+                cin >> n;
+                cout << "Enter k for arrangements with repetitions: ";
+                cin >> k;
+                BigInt result = arrangementsWithRepetitions(BigInt(n), BigInt(k));
+                cout << "Arrangements with Repetitions: " << result << endl;
                 pause();
                 break;
             }
@@ -82,11 +100,12 @@ int main() {
                 cout << "Enter the count of numbers for permutations with repetitions: ";
                 cin >> count;
                 vector<int> counts(count);
-                cout << "Enter the numbers: ";
-                for (int i = 0; i < count; ++i) {
+                for (int i = 0; i < count; i++) {
+                    cout << "Enter the number nr " << i << ": ";
                     cin >> counts[i];
                 }
-                cout << "Permutations with Repetitions: " << permutationsWithRepetitions(counts) << endl;
+                BigInt result = permutationsWithRepetitions(counts);
+                cout << "Permutations with Repetitions: " << result << endl;
                 pause();
                 break;
             }
@@ -100,4 +119,93 @@ int main() {
     } while (choice != 0);
 
     return 0;
+}
+
+void pause() {
+    cout << "Press Enter to continue...";
+    _getch();
+    cout << endl;
+}
+
+BigInt factorial(const BigInt &n) {
+    if (n <= 1) {
+        return 1;
+    }
+    BigInt result = 1;
+    for (BigInt i = 2; i <= n; i++) {
+        result *= i;
+    }
+    return result;
+}
+
+BigInt combinations(const BigInt &n, const BigInt &k) {
+    // using the formula C(n, k) = n! / (k! * (n-k)!)
+    if (k < 0 || k > n) {
+        return 0;
+    }
+
+    BigInt result = 1;
+    for (BigInt i = 1; i <= k; ++i) {
+        result *= n - i + 1;
+        result /= i;
+    }
+
+    return result;
+}
+
+BigInt arrangements(const BigInt &n, const BigInt &k) {
+    // using the formula A(n, k) = n! / (n-k)!
+    if (k < 0 || k > n) {
+        return 0;
+    }
+
+    BigInt result = 1;
+    for (BigInt i = n - k + 1; i <= n; ++i) {
+        result *= i;
+    }
+
+    return result;
+}
+
+BigInt permutations(const BigInt &n) {
+    // using the formula P(n) = n!
+    return factorial(n);
+}
+
+BigInt combinationsWithRepetitions(const BigInt &n, const BigInt &k) {
+    // using the formula C(n, k) = (n + k - 1)! / (k! * (n-1)!)
+    BigInt result = 1;
+    for (BigInt i = 1; i <= k; ++i) {
+        result *= (n + i - 1);
+        result /= i;
+    }
+    return result;
+}
+
+BigInt arrangementsWithRepetitions(const BigInt &n, const BigInt &k) {
+    // using the formula A(n, k) = n^k
+    BigInt result = 1;
+    for (BigInt i = 0; i < k; ++i) {
+        result *= n;
+    }
+    return result;
+}
+
+BigInt permutationsWithRepetitions(const std::vector<int> &counts) {
+    // using the formula P(n1, n2, ..., nk) = (n1 + n2 + ... + nk)! / (n1! * n2! * ... * nk!)
+    int total = 0;
+    BigInt numerator = 1;
+    BigInt denominator = 1;
+
+    for (int count: counts) {
+        total += count;
+    }
+
+    numerator = factorial(total);
+
+    for (int count: counts) {
+        denominator *= factorial(count);
+    }
+
+    return numerator / denominator;
 }
