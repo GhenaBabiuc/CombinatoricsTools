@@ -122,7 +122,7 @@ int main() {
 }
 
 void pause() {
-    cout << "Press Enter to continue...";
+    cout << "Press Enter to continue...\n";
     _getch();
     cout << endl;
 }
