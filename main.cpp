@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <conio.h>
+#include <algorithm>
 #include "BigInt.hpp"
 
 using namespace std;
@@ -21,6 +22,18 @@ BigInt permutationsWithRepetitions(const std::vector<int> &counts);
 
 void pause();
 
+int countPermutations(const string &word) {
+    string wordCopy = word;
+    sort(wordCopy.begin(), wordCopy.end());
+
+    int count = 0;
+    do {
+        count++;
+    } while (next_permutation(wordCopy.begin(), wordCopy.end()));
+
+    return count;
+}
+
 int main() {
     int choice;
     int n, k;
@@ -33,6 +46,7 @@ int main() {
         cout << "5. Combinations with Repetitions\n";
         cout << "6. Arrangements with Repetitions\n";
         cout << "7. Permutations with Repetitions\n";
+        cout << "8. Permutations with word\n";
         cout << "0. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
@@ -106,6 +120,14 @@ int main() {
                 }
                 BigInt result = permutationsWithRepetitions(counts);
                 cout << "Permutations with Repetitions: " << result << endl;
+                pause();
+                break;
+            }
+            case 8: {
+                string inputWord;
+                cout << "Enter the word ";
+                cin >> inputWord;
+                cout << "Number of word permutations " << inputWord << ": " << countPermutations(inputWord) << endl;
                 pause();
                 break;
             }
