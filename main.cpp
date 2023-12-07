@@ -20,22 +20,12 @@ BigInt arrangementsWithRepetitions(const BigInt &n, const BigInt &k);
 
 BigInt permutationsWithRepetitions(const std::vector<int> &counts);
 
+BigInt countPermutations(const string &word);
+
 void pause();
 
-int countPermutations(const string &word) {
-    string wordCopy = word;
-    sort(wordCopy.begin(), wordCopy.end());
-
-    int count = 0;
-    do {
-        count++;
-    } while (next_permutation(wordCopy.begin(), wordCopy.end()));
-
-    return count;
-}
-
 int main() {
-    char choice;
+    int choice;
     int n, k;
     do {
         cout << "Menu:\n";
@@ -136,6 +126,7 @@ int main() {
                 break;
             default:
                 cout << "Invalid choice. Please try again.\n";
+                pause();
                 break;
         }
     } while (choice != 0);
@@ -147,6 +138,19 @@ void pause() {
     cout << "Press Enter to continue...\n";
     _getch();
     cout << endl;
+    system("cls");
+}
+
+BigInt countPermutations(const string &word) {
+    string wordCopy = word;
+    sort(wordCopy.begin(), wordCopy.end());
+
+    BigInt count = 0;
+    do {
+        count++;
+    } while (next_permutation(wordCopy.begin(), wordCopy.end()));
+
+    return count;
 }
 
 BigInt factorial(const BigInt &n) {
