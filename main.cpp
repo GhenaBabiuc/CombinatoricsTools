@@ -35,7 +35,7 @@ int countPermutations(const string &word) {
 }
 
 int main() {
-    int choice;
+    char choice;
     int n, k;
     do {
         cout << "Menu:\n";
